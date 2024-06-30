@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Inventor</title>
+    <style>
+        body {
+            background-color: #1E90FF; /* Blue background */
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        #searchBar {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: white;
+            color: #1E90FF;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: lightgray;
+        }
+
+        .video {
+            background-color: #4682B4; /* Slightly darker blue */
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .video-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .video-description {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .video iframe {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .share-button, .delete-button {
+            background-color: white;
+            color: #1E90FF;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .share-button:hover, .delete-button:hover {
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="searchBar" placeholder="Search topics...">
+        <button onclick="promptUpload()">+</button>
+        <div id="videoContainer"></div>
+    </div>
+
+    <script>
+        const uploadPassword = "K@u5h4lhaladi"; // Strong password including your name
+        const deletePassword = "K@u5h4lbhat"; // Password for deletion
+
+        function promptUpload() {
+            const password = prompt("Enter the upload password:");
+            if (password === uploadPassword) {
+                uploadVideo();
+            } else {
+                alert("Incorrect password!");
+            }
+        }
+
+        function uploadVideo() {
+            const title = prompt("Enter video title:");
+            const description = prompt("Enter video description (Arduino codes):");
+            const videoUrl = prompt("Enter video URL (if applicable):");
+
+            const videoContainer = document.getElementById('videoContainer');
+            const videoElement = document.createElement('div');
+            videoElement.className = 'video';
+
+            videoElement.innerHTML = `
+                <div class="video-title">${title}</div>
+                <div class="video-description">${description}</div>
+                <iframe src="${videoUrl}" frameborder="0" allowfullscreen></iframe>
+                <button class="share-button" onclick="shareVideo('${title}')">Share</button>
+                <button class="delete-button" onclick="promptDelete('${title}', '${deletePassword}')">Delete</button>
+            `;
+
+            videoContainer.appendChild(videoElement);
+        }
+
+        function promptDelete(title, correctPassword) {
+            const password = prompt("Enter your delete password:");
+            if (password === correctPassword) {
+                deleteVideo(title);
+            } else {
+                alert("Incorrect delete password!");
+            }
+        }
+
+        function deleteVideo(title) {
+            if (confirm(`Are you sure you want to delete '${title}'?`)) {
+                // Implement delete logic here, like removing the video element from DOM
+                const videoElement = document.querySelector(`.video-title:contains('${title}')`).parentNode;
+                videoElement.remove();
+                console.log(`Deleted video '${title}'`);
+            }
+        }
+
+        function shareVideo(title) {
+            // Example: Implement share functionality using Web Share API
+            navigator.share({
+                title: title,
+                text: 'Check out this video!',
+                url: window.location.href
+            }).then(() => {
+                console.log('Shared successfully');
+            }).catch((error) => {
+                console.error('Error sharing:', error);
+            });
+        }
+
+        document.getElementById('searchBar').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const videos = document.getElementsByClassName('video');
+            Array.from(videos).forEach(function(video) {
+                const title = video.getElementsByClassName('video-title')[0].innerText.toLowerCase();
+                if (title.includes(searchTerm)) {
+                    video.style.display = '';
+                } else {
+                    video.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

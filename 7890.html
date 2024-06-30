@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaushal's Projects</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #87CEEB;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            background-color: #4682B4;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        header h1, footer p {
+            margin: 0;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content h2 {
+            color: #000000;
+        }
+        .prompt {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: #4169E1;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+        .prompt button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #passwordPrompt, #subscribePrompt {
+            display: block;
+        }
+        .hidden {
+            display: none;
+        }
+        .buttons {
+            text-align: right;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .video-section {
+            margin-bottom: 20px;
+        }
+        .video {
+            max-width: 100%;
+            height: auto;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kaushal's Projects</h1>
+    </header>
+    
+    <div class="content">
+        <div id="passwordPrompt" class="prompt">
+            <p>Enter password to upload or delete videos:</p>
+            <input type="password" id="passwordInput">
+            <button onclick="checkPassword()">Submit</button>
+            <button onclick="skipPassword()">No</button>
+        </div>
+
+        <div id="subscribePrompt" class="prompt">
+            <p>Would you like to subscribe to our channel?</p>
+            <button onclick="subscribeNow()">Go Now</button>
+            <button onclick="subscribeLater()">Later</button>
+        </div>
+
+        <div class="video-section">
+            <h2>Project Title</h2>
+            <iframe id="video" src="" frameborder="0" allowfullscreen></iframe>
+            <h2>Arduino Code</h2>
+            <pre id="code">
+                <code>
+                <!-- Your Arduino code will appear here -->
+                </code>
+            </pre>
+        </div>
+    </div>
+    
+    <div class="buttons hidden" id="adminButtons">
+        <input type="text" id="videoUrlInput" placeholder="Paste YouTube URL here">
+        <button onclick="embedYouTubeVideo()">Upload Video</button>
+        <button onclick="deleteVideo()">Delete Video</button>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Kaushal's Projects. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const correctPassword = "megamemoryk12";
+        const videoStorageKey = "projectVideo";
+
+        // Load stored video URL on page load
+        window.onload = function() {
+            const storedVideoUrl = localStorage.getItem(videoStorageKey);
+            if (storedVideoUrl) {
+                embedYouTubeVideo(storedVideoUrl);
+                document.getElementById("videoUrlInput").value = storedVideoUrl;
+            }
+        };
+
+        function checkPassword() {
+            const input = document.getElementById("passwordInput").value;
+            if (input === correctPassword) {
+                document.getElementById("passwordPrompt").style.display = "none";
+                document.getElementById("adminButtons").classList.remove("hidden");
+            } else {
+                alert("Incorrect password!");
+            }
+        }
+
+        function skipPassword() {
+            document.getElementById("passwordPrompt").style.display = "none";
+        }
+
+        function subscribeNow() {
+            document.getElementById("subscribePrompt").style.display = "none";
+            window.location.href = "https://www.youtube.com/@techindia777?sub_confirmation=1";
+        }
+
+        function subscribeLater() {
+            document.getElementById("subscribePrompt").style.display = "none";
+        }
+
+        function embedYouTubeVideo() {
+            const url = document.getElementById("videoUrlInput").value;
+            const videoId = extractYouTubeVideoId(url);
+            if (videoId) {
+                const iframe = document.getElementById("video");
+                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                // Store video URL in localStorage
+                localStorage.setItem(videoStorageKey, url);
+            } else {
+                alert("Invalid YouTube URL");
+            }
+        }
+
+        function extractYouTubeVideoId(url) {
+            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[7].length == 11) ? match[7] : null;
+        }
+
+        function deleteVideo() {
+            const iframe = document.getElementById("video");
+            iframe.src = "";
+            // Remove video URL from localStorage
+            localStorage.removeItem(videoStorageKey);
+        }
+    </script>
+</body>
+</html>

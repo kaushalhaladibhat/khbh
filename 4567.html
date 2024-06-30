@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>indian inventor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            color: #007bff;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #0288d1;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+        .container {
+            padding: 20px;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .video {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .video h2 {
+            margin: 0 0 10px;
+            color: #007bff;
+        }
+        .video-description {
+            color: #333;
+        }
+        .video-buttons {
+            margin-top: 10px;
+        }
+        .video-buttons button {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-right: 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .video-buttons button:hover {
+            background-color: #0277bd;
+        }
+        .footer-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .footer-buttons button {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .footer-buttons button:hover {
+            background-color: #0277bd;
+        }
+        .upload-container, .delete-container, .password-container {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+        .upload-container div, .delete-container div, .password-container div {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .upload-container input, .delete-container input, .password-container input {
+            display: block;
+            width: calc(100% - 20px);
+            margin: 10px auto;
+            padding: 10px;
+        }
+        .upload-container button, .delete-container button, .password-container button {
+            width: 100%;
+            padding: 10px;
+        }
+        .fixed-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        #delete-button {
+            right: 70px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>indian inventor</h1>
+        <div style="position:absolute; top:10px; right:10px; font-size:14px;">indinv</div>
+    </div>
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Search..." style="width:100%; padding:10px;">
+        </div>
+
+        <!-- Video template -->
+        <div class="video">
+            <h2></h2>
+            <p class="video-description"></p>
+            <div class="video-buttons">
+                <button onclick="shareVideo()">Share</button>
+                <button onclick="readMore()">Read More</button>
+            </div>
+        </div>
+
+        <div class="footer-buttons">
+            <button onclick="loadMorePosts()">More Posts</button>
+        </div>
+    </div>
+
+    <button class="fixed-button" id="upload-button" onclick="showPasswordPrompt('upload')">+</button>
+    <button class="fixed-button" id="delete-button" onclick="showPasswordPrompt('delete')">-</button>
+
+    <div class="upload-container" id="upload-container">
+        <div>
+            <h2>Upload Video</h2>
+            <input type="text" id="video-title" placeholder="Video Title">
+            <input type="text" id="video-description" placeholder="Video Description">
+            <input type="file" id="video-file" accept="video/*">
+            <button onclick="uploadVideo()">Upload</button>
+            <button onclick="hideUploadForm()">Cancel</button>
+        </div>
+    </div>
+
+    <div class="delete-container" id="delete-container">
+        <div>
+            <h2>Delete Video</h2>
+            <input type="text" id="video-id" placeholder="Video ID">
+            <button onclick="deleteVideo()">Delete</button>
+            <button onclick="hideDeleteForm()">Cancel</button>
+        </div>
+    </div>
+
+    <div class="password-container" id="password-container">
+        <div>
+            <h2>Enter Password</h2>
+            <input type="password" id="password-input" placeholder="Password">
+            <button onclick="verifyPassword()">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        const correctPassword = "megamemoryk12";
+        let currentAction = '';
+
+        function showPasswordPrompt(action) {
+            currentAction = action;
+            document.getElementById('password-container').style.display = 'flex';
+        }
+
+        function verifyPassword() {
+            const password = document.getElementById('password-input').value;
+
+            if (password === correctPassword) {
+                document.getElementById('password-container').style.display = 'none';
+                if (currentAction === 'upload') {
+                    showUploadForm();
+                } else if (currentAction === 'delete') {
+                    showDeleteForm();
+                }
+            } else {
+                alert("Incorrect password!");
+            }
+        }
+
+        function showUploadForm() {
+            document.getElementById('upload-container').style.display = 'flex';
+        }
+
+        function hideUploadForm() {
+            document.getElementById('upload-container').style.display = 'none';
+        }
+
+        function showDeleteForm() {
+            document.getElementById('delete-container').style.display = 'flex';
+        }
+
+        function hideDeleteForm() {
+            document.getElementById('delete-container').style.display = 'none';
+        }
+
+        function uploadVideo() {
+            const title = document.getElementById('video-title').value;
+            const description = document.getElementById('video-description').value;
+            const file = document.getElementById('video-file').files[0];
+
+            if (!title || !description || !file) {
+                alert("Please fill all the fields and select a video file.");
+                return;
+            }
+
+            // Simulate video upload (you would replace this with actual upload logic)
+            alert(`Video titled "${title}" uploaded successfully!`);
+
+            // Clear the input fields
+            document.getElementById('video-title').value = '';
+            document.getElementById('video-description').value = '';
+            document.getElementById('video-file').value = '';
+            hideUploadForm();
+        }
+
+        function deleteVideo() {
+            const videoId = document.getElementById('video-id').value;
+
+            if (!videoId) {
+                alert("Please enter the video ID.");
+                return;
+            }
+
+            // Simulate video deletion (you would replace this with actual deletion logic)
+            alert(`Video with ID "${videoId}" deleted successfully!`);
+
+            // Clear the input fields
+            document.getElementById('video-id').value = '';
+            hideDeleteForm();
+        }
+
+        function shareVideo() {
+            alert("Share functionality to be implemented.");
+        }
+
+        function readMore() {
+            alert("Read more functionality to be implemented.");
+        }
+
+        function loadMorePosts() {
+            alert("Load more posts functionality to be implemented.");
+        }
+    </script>
+</body>
+</html>
+
